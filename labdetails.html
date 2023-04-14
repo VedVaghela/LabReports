@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="popup.css">
+    <title>Lab Reports</title>
+</head>
+<body>
+    <div class="form-popup" id="myForm">
+        <form  class="form-container">
+          <h1>Enter The Lab Report Details</h1>
+
+          <input type="hidden" >
+      
+          <label for="pH"><b>pH Value</b></label>
+          <input type="number" min="1" max="14" step="0.01" placeholder="Enter pH Value" id="pH" required>
+      
+          <label for="N"><b>Nitrogen Value</b></label>
+          <input type="number" min="0" step="0.01" placeholder="Enter N Value" id="N" required>
+      
+          <label for="P"><b>Phosphorus Value</b></label>
+          <input type="number" min="0" step="0.01" placeholder="Enter P Value" id="P" required>
+      
+          <label for="K"><b>Potassium Value</b></label>
+          <input type="number" min="0" step="0.01" placeholder="Enter K Value" id="K" required>
+      
+          <button type="submit" class="btn" id="submitreport">Submit Report</button>
+         
+        </form>
+      </div>
+      <script>
+
+        document.getElementById('myForm').addEventListener("submit", (e) => {
+                e.preventDefault();
+
+                let reportid = localStorage.getItem("id")
+        let token = localStorage.getItem("access_token")
+
+        let Nitrogen = document.getElementById('N').value
+        let Phosphorus = document.getElementById('P').value
+        let Potassium = document.getElementById('K').value
+        let pH = document.getElementById('pH').value
+
+        
+        var myHeaders = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${token}`);
+
+        var raw = JSON.stringify({
+          "reportId": reportid,
+          "Nitrogen": Nitrogen,
+          "Phosphorus": Phosphorus,
+          "Potassium": Potassium,
+          "pH": pH
+        });
+        console.log(raw)
+        var requestOptions = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
+          redirect: 'follow'
+        };
+
+        fetch("https://super-rugby-shirt-eel.cyclic.app/lab/fulfill", requestOptions)
+          .then(response => response.json())
+          .then(result => console.log(result))
+          .catch(error => console.log('error', error));
+        })
+
+        
+        </script>
+</body>
+</html>
